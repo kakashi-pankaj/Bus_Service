@@ -37,7 +37,7 @@ class BusService:
                 print(f'Your pnr is {pnr}')
 
         else:
-            print('Invalid BUS ticket type')
+            print('Invalid ticket type')
 
     def cancel_ticket(self, ticket: Ticket):
         if type(ticket) == Ticket:
