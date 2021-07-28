@@ -5,11 +5,12 @@ tickets = []
 
 class Ticket:
 
-    def __init__(self, source, destination, name, age):
+    def __init__(self, source, destination, name, age, pnr=0):
         self.source = source
         self.destination = destination
         self.name = name
         self.age = age
+        self.pnr = pnr
 
     def __str__(self):
         return f'''{self.__dict__}'''
@@ -37,27 +38,40 @@ class BusService:
                 print(f'Your pnr is {pnr}')
 
         else:
-            print('Invalid BUS ticket type')
+            print('Invalid ticket type')
 
     def cancel_ticket(self, ticket: Ticket):
         if type(ticket) == Ticket:
             if ticket in tickets:
                 tickets.remove(ticket)
+                print("Ticket has been successfully cancelled")
             else:
                 print('ticket not in database')
         else:
-            print('invalid ticket type')
+            print('invalid ticket parameter type')
 
-    def update_ticket(self):
-        pass
+    def update_ticket(self, ticket: Ticket, pnr):
+        if type(ticket) == Ticket:
+            for ticket in tickets:
+                if ticket.pnr == pnr:
+                    update = get_user_input()
+                    ticket.source = update.source
+                    ticket.destination = update.destination
+                    ticket.name = update.name
+                    ticket.age = update.age
+                    ticket.pnr = pnr
+                    print('ticket successfully updated')
+                    return
+            print("Ticket not found")
+        else:
+            print('Invalid ticket parameter type')
+
+
 
     def pnr(self, ticket):
         ind = tickets.index(ticket)
-        pnr = int(100) + ind
-        for i in tickets:
-            if i == ticket:
-                ticket['pnr'] = pnr
-        return pnr
+        ticket.pnr = int(100) + int(ind)
+        return ticket.pnr
 
 
 def check_availability():
@@ -86,11 +100,21 @@ def add_ticket():
 
 
 def cancel_ticket():
-    pass
+    pnr = int(input("Enter Cancelling ticket PNR: "))
+    for ticket in tickets:
+        if ticket.pnr == pnr:
+            service.cancel_ticket(ticket)
+            return
+    print("PNR not in database")
 
 
 def update_ticket():
-    pass
+    pnr = int(input('Enter PNR of Ticket to be Updated: '))
+    for ticket in tickets:
+        if ticket.pnr == pnr:
+            service.update_ticket(ticket, pnr)
+            return
+    print("PNR not in database")
 
 
 def all_tickets():
@@ -131,4 +155,5 @@ if __name__ == '__main__':
         }
         op = int(input('Choose Operation: '))
         operations.get(op)()
+        print()
         flag = choice()
